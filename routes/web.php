@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\PageController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Guest\CategoryController;
+use App\Http\Controllers\Guest\PageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +16,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::name('guest.')->group(function () {
+    Route::controller(PageController::class)->name('pages.')->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
 
-Route::controller(PageController::class)->name('pages.')->group(function () {
-    Route::get('/', 'index')->name('index');
+    Route::controller(CategoryController::class)->name('catalog.')->prefix('catalog')->group(function () {
+        Route::get('/', 'index')->name('index');
+    });
+});
+
+Route::name('admin.')->prefix('admin')->group(function () {
+    Route::controller(AdminCategoryController::class)->name('categories.')->prefix('categories')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::post('/', 'store')->name('store');
+        Route::get('/create', 'create')->name('create');
+        Route::get('/{id}/edit', 'edit')->name('edit');
+        Route::patch('/{id}', 'update')->name('update');
+        Route::delete('/{id}', 'destroy')->name('destroy');
+    });
 });

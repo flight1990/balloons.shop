@@ -4,12 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Category;
 use Prettus\Repository\Eloquent\BaseRepository;
+use Prettus\Repository\Contracts\CacheableInterface;
+use Prettus\Repository\Traits\CacheableRepository;
 
-class CategoryRepository extends BaseRepository
+
+class CategoryRepository extends BaseRepository implements CacheableInterface
 {
-    public function boot(){
-        $this->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-    }
+    use CacheableRepository;
 
     public function model(): string
     {
